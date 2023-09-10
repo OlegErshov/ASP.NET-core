@@ -1,24 +1,41 @@
-﻿@{
+﻿@using WEB.Models
+@model List<DemoList>
+@{
     ViewBag.Title = "Index";
 }
 
+
     <main class="container">
-        <h1>Лабораторная работа 1</h1>
+    
+        
+        <h1>@ViewData["Name"]</h1>
+    
+
         <h2>Список</h2>
 
         <ol>
-            <li>Элемент 1</li>
-            <li>Элемент 2</li>
-            <li>Элемент 3</li>
+            @for (int i = 1; i < 6; i++)
+            {
+                <li>номер @i</li>
+            }
         </ol>
 
         <hr />
 
         <h2>Форма</h2>
 
-        <form>
+        <form method="post">
             <fieldset class="row mb-3">
                 <div class="col-sm-10">
+                    <div>
+                        <select class="form-select">
+                            @foreach (var item in Model)
+                            {
+                                <option asp-for="Id">@item.Name</option>
+                            }
+                           
+                        </select>
+                    </div>
                     <div class="form-check">
                         <input class ="form-check-input" type="checkbox" name="чек-бокс 1" />
                         <label class ="form-check-label">чек-бокс 1</label>
