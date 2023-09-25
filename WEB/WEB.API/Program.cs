@@ -1,5 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using WEB.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connString = builder.Configuration.GetConnectionString("SqLiteConnection");
+
+builder.Services.AddDbContext<AppDbContext>(opt =>
+                                opt.UseSqlite(connString));
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -7,8 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
+
+
+
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -17,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
