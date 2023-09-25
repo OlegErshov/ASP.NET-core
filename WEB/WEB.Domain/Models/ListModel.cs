@@ -1,6 +1,6 @@
 ﻿namespace WEB.Domain.Models
 {
-    public class ProductListModel
+    public class ListModel<T>
     {
         // запрошенный список объектов
         public List<T> Items { get; set; } = new();
