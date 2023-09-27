@@ -1,19 +1,19 @@
-﻿<a asp-controller="Cart" asp-action="Index" class="navbar-text ms-auto">
-    @await Component.InvokeAsync("Cart",0.00) <i class="fa-solid fa-cart-shopping"></i>(0)
-</a>
+﻿
+    @await Component.InvokeAsync("Cart")
+
 <div class="dropdown ms-4 nav-color">
     <button class="btn btn-secondary dropdown-toggle"
             type="button" id="dropdownMenuButton"
             data-bs-toggle="dropdown"
             aria-expanded="false">
         User@gmail.com
-        <img src="images/default-profile-picture.png" width="30"
+        <img src="images/rock.jpg" width="30"
              alt="User" class="rounded nav-color" />
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <li>
             <span class="dropdown-item-text">
-                <img src="images/default-profile-picture.png"
+                <img src="images/rock.jpg"
                      width="50" alt="User" class="rounded" />
                 user@gmail.com
             </span>

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WEB.Components
+namespace WEB.Components;
+
+//[ViewComponent]
+public class CartViewComponent : ViewComponent
 {
-    [ViewComponent]
-    public class CartViewComponent 
+    public IViewComponentResult Invoke(double price)
     {
-        public string Invoke(double price)
-        {
-            return price.ToString();
-        }
+        return View();
     }
 }
