@@ -1,4 +1,5 @@
-﻿using WEB.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using WEB.Domain.Entities;
 using WEB.Domain.Models;
 using WEB.Services.GenreServices;
 
@@ -9,9 +10,13 @@ namespace WEB.Services.MovieServices
         List<Movie> _movies;
         List<Genre> _genres;
 
-        public MemoryMovieService(IGenreService genreService) {
+        IConfiguration _config;
+        public MemoryMovieService([FromServices] IConfiguration config,
+                                    IGenreService genreService) {
 
             _genres = genreService.GetCategoryListAsync().Result.Data;
+
+            _config = config;
 
             SetupData();
         }
@@ -43,19 +48,31 @@ namespace WEB.Services.MovieServices
         }
 
         public  Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1)
-        {        
-            var result =  _movies!.Where(x => x.Genre.NormalizedName == null || x.Genre.NormalizedName.Equals(categoryNormalizedName)).ToList();
+        {
+
+            var itemsOnPage = _config.GetValue<int>("ItemsPerPage");
+
+            int totalPages = _movies!.Where(x => x.Genre.NormalizedName == null ||
+                                    x.Genre.NormalizedName.Equals(categoryNormalizedName)).
+                                    ToList().Count() / itemsOnPage + 1;
+
+            var result =  _movies!.Where(x => x.Genre.NormalizedName == null || 
+                                    x.Genre.NormalizedName.Equals(categoryNormalizedName)).ToList().
+                                    Skip((pageNo - 1) * itemsOnPage).Take(itemsOnPage);
+
 
             return Task.FromResult(new ResponseData<ListModel<Movie>>
             {
                 Data = new ListModel<Movie>
                 {
-                    Items = result
+                    Items = result.ToList(),
+                    CurrentPage = pageNo,
+                    TotalPages = totalPages
                 },
                 Success = true,
                 ErrorMessage = string.Empty
 
-            }); 
+            }) ; 
         }
 
         public Task UpdateProductAsync(int id, Movie product, IFormFile? formFile)

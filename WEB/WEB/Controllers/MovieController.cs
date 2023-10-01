@@ -21,7 +21,7 @@ namespace WEB.Controllers
             _genreService = genreService;
         }
 
-        public async Task<IActionResult> Index(string? genre)
+        public async Task<IActionResult> Index(string? genre,int pageNo)
         {
             Genres = _genreService.GetCategoryListAsync().Result.Data;
             ViewBag.Genres = Genres;
@@ -37,10 +37,10 @@ namespace WEB.Controllers
             ViewBag.CurrentGenre = CurrentGenre;
 
             var productResponse =
-            await _movieService.GetProductListAsync(genre);
+            await _movieService.GetProductListAsync(CurrentGenre.NormalizedName,pageNo);
             if (!productResponse.Success)
                 return NotFound(productResponse.ErrorMessage);
-            return View(productResponse.Data.Items);
+            return View(productResponse.Data);
         }
     }
 }
