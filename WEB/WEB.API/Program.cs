@@ -7,6 +7,8 @@ var connString = builder.Configuration.GetConnectionString("SqLiteConnection");
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
                                 opt.UseSqlite(connString));
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -19,6 +21,7 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+await DbInitializer.SeedData(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

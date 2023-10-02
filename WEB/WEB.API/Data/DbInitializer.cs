@@ -11,27 +11,63 @@ namespace WEB.API.Data
             using var scope = app.Services.CreateScope();
             var context =
             scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            // Получение урл адреса 
+            string? url = app.Configuration.GetValue<string>("AppUrl");
             // Выполнение миграций
             await context.Database.MigrateAsync();
 
-            context.Movies.Add(new Movie
+            context.Add(new Genre
+            {
+                Name = "Action",
+                NormalizedName = "action"
+
+            });
+
+            
+
+            context.Add(new Genre
+            {
+                Name = "Adventure",
+                NormalizedName = "adventure"
+
+            });
+
+            context.Add(new Genre
+            {
+                Name = "Drama",
+                NormalizedName = "drama"
+
+            });
+
+            context.Add(new Genre
+            {
+                Name = "Thriller",
+                NormalizedName = "thriller"
+
+            });
+            await context.SaveChangesAsync();
+
+            context.Add(new Movie
             {
                 Title = "Iron Man",
                 Description = "len pisat",
                 TicketPrice = 2,
-                ImgSrc = "images/iron-man.jpg",
-                //Genre = _genres.Find(c => c.NormalizedName.Equals("action"))
-            });
+                ImgSrc = url + "/images/iron-man.jpg",
+                GenreId = context.Genres.FirstOrDefault(c => c.NormalizedName.Equals("action")).Id
+            }) ;
 
-            context.Movies.Add(new Movie
+            context.Add(new Movie
             {
-                Id = 2,
+
                 Title = "Iron Man 2",
                 Description = "len pisat",
                 TicketPrice = 3,
-                ImgSrc = "images/iron-man2.jpg",
-                //Genre = _genres.Find(c => c.NormalizedName.Equals("action"))
-            });
+                ImgSrc = url + "/images/iron-man2.jpg",
+                GenreId = context.Genres.FirstOrDefault(c => c.NormalizedName.Equals("action")).Id
+            }) ;
+
+            await context.SaveChangesAsync();
         }
     }
 

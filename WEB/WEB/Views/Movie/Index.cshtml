@@ -5,6 +5,12 @@
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
     string? category = request.RouteValues["category"]?.ToString();
+    int prev = Model.CurrentPage == 1
+            ? 1
+            : Model.CurrentPage - 1;
+    int next = Model.CurrentPage == Model.TotalPages
+            ? Model.TotalPages
+            : Model.CurrentPage + 1;
 }
 
 
@@ -73,8 +79,13 @@
 
         <nav aria-label="Page navigation example">
           <ul class="pagination">
+            
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+              <a class="page-link" asp-controller="Movie"
+                           asp-action="Index"
+                           asp-route-pageNo="@prev"
+                           asp-route-genre="@category" 
+                           aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
@@ -86,7 +97,11 @@
                            asp-route-genre="@category">@i</a></li>
             }
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+              <a class="page-link"  aria-label="Next"
+                   asp-controller="Movie"
+                   asp-action="Index"
+                   asp-route-pageNo="@next"
+                   asp-route-genre="@category">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
