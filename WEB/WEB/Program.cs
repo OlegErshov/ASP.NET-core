@@ -2,6 +2,8 @@ using WEB.Services.GenreServices;
 using WEB.Services.MovieServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WEB.UriData;
+using WEB.Services.ApiServices;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieContext>(options =>
@@ -11,7 +13,12 @@ builder.Services.AddDbContext<MovieContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGenreService, MemoryGenreService>();
-builder.Services.AddScoped<IMovieService,MemoryMovieService>();
+
+UriData.ApiUri = builder.Configuration.GetSection("UriData")[key: "ApiUri"]!;
+
+builder.Services
+.AddHttpClient<IMovieService, ApiMovieService>(opt =>
+opt.BaseAddress = new Uri(UriData.ApiUri));
 
 var app = builder.Build();
 
@@ -25,6 +32,7 @@ if (!app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
