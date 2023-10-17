@@ -26,7 +26,7 @@ namespace WEB.API.Controllers
         // GET: api/Movies
         [HttpGet]
         
-        [Route("{genre}/page_{pageNo:int?}")]
+        [Route("page_{pageNo:int}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(string? genre,
                                                                       int pageNo = 1,
                                                                       int pageSize = 3)
