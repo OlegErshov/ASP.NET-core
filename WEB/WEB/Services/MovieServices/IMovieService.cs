@@ -12,14 +12,14 @@ namespace WEB.Services.MovieServices
         ///фильтрации</param>
 /// <param name="pageNo">номер страницы списка</param>
 /// <returns></returns>
-public Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string?
-categoryNormalizedName, int pageNo = 1);
+        public Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string?
+        categoryNormalizedName, int pageNo = 1);
         /// <summary>
         /// Поиск объекта по Id
         /// </summary>
         /// <param name="id">Идентификатор объекта</param>
         /// <returns>Найденный объект или null, если объект не найден</returns>
-        public Task<ResponseData<Movie>> GetProductByIdAsync(int id);
+        public Task<ResponseData<Movie>> GetProductByIdAsync(int? id);
         /// <summary>
         /// Обновление объекта
         /// </summary>
@@ -42,5 +42,7 @@ categoryNormalizedName, int pageNo = 1);
         /// <returns>Созданный объект</returns>
         public Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile?
         formFile);
+
+        public Task SaveChangesAsync();
     }
 }

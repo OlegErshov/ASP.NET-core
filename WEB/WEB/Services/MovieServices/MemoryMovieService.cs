@@ -42,25 +42,40 @@ namespace WEB.Services.MovieServices
             throw new NotImplementedException();
         }
 
-        public Task<ResponseData<Movie>> GetProductByIdAsync(int id)
+        public Task<ResponseData<Movie>> GetProductByIdAsync(int? id)
         {
             throw new NotImplementedException();
         }
 
+        
         public  Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1)
         {
 
             var itemsOnPage = _config.GetValue<int>("ItemsPerPage");
 
-            int totalPages = _movies!.Where(x => x.Genre.NormalizedName == null ||
+
+            int totalPages;
+            List<Movie>  result = new List<Movie>();
+
+            if (categoryNormalizedName == null)
+            {
+                totalPages = _movies.Count();
+                result = _movies.Skip((pageNo - 1) * itemsOnPage).Take(itemsOnPage).ToList();
+
+            }
+            else
+            {
+                 totalPages = _movies!.Where(x => x.Genre.NormalizedName == null ||
                                     x.Genre.NormalizedName.Equals(categoryNormalizedName)).
                                     ToList().Count() / itemsOnPage + 1;
 
-            var result =  _movies!.Where(x => x.Genre.NormalizedName == null || 
-                                    x.Genre.NormalizedName.Equals(categoryNormalizedName)).ToList().
-                                    Skip((pageNo - 1) * itemsOnPage).Take(itemsOnPage);
+                result = _movies!.Where(x => x.Genre.NormalizedName == null ||
+                                        x.Genre.NormalizedName.Equals(categoryNormalizedName)).ToList().
+                                        Skip((pageNo - 1) * itemsOnPage).Take(itemsOnPage).ToList();
+            }
 
-
+             
+            
             return Task.FromResult(new ResponseData<ListModel<Movie>>
             {
                 Data = new ListModel<Movie>
@@ -77,6 +92,11 @@ namespace WEB.Services.MovieServices
 
         public Task UpdateProductAsync(int id, Movie product, IFormFile? formFile)
         {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveChangesAsync() 
+        { 
             throw new NotImplementedException();
         }
     }

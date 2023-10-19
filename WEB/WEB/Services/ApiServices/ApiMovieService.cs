@@ -56,7 +56,7 @@ namespace WEB.Services.ApiServices
             throw new NotImplementedException();
         }
 
-        public Task<ResponseData<Movie>> GetProductByIdAsync(int id)
+        public Task<ResponseData<Movie>> GetProductByIdAsync(int? id)
         {
             throw new NotImplementedException();
         }
@@ -111,6 +111,11 @@ namespace WEB.Services.ApiServices
 
         public Task UpdateProductAsync(int id, Movie product, IFormFile? formFile)
         {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveChangesAsync()
+        { 
             throw new NotImplementedException();
         }
     }

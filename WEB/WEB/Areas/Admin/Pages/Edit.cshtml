@@ -1,0 +1,60 @@
+﻿@page
+@model WEB.Areas.Admin.Pages.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Movie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Movie.Id" />
+            <div class="form-group">
+                <label asp-for="Movie.Title" class="control-label"></label>
+                <input asp-for="Movie.Title" class="form-control" />
+                <span asp-validation-for="Movie.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Movie.Url" class="control-label"></label>
+                <input asp-for="Movie.Url" class="form-control" />
+                <span asp-validation-for="Movie.Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Movie.Description" class="control-label"></label>
+                <input asp-for="Movie.Description" class="form-control" />
+                <span asp-validation-for="Movie.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Movie.GenreId" class="control-label"></label>
+                <select asp-for="Movie.GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
+                <span asp-validation-for="Movie.GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Movie.TicketPrice" class="control-label"></label>
+                <input asp-for="Movie.TicketPrice" class="form-control" />
+                <span asp-validation-for="Movie.TicketPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Movie.ImgSrc" class="control-label"></label>
+                <input asp-for="Movie.ImgSrc" class="form-control" />
+                <span asp-validation-for="Movie.ImgSrc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
