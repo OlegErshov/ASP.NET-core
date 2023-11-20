@@ -11,14 +11,13 @@ builder.Services.AddDbContext<MovieContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddScoped<IGenreService, MemoryGenreService>();
+builder.Services.AddRazorPages();
 
 UriData.ApiUri = builder.Configuration.GetSection("UriData")[key: "ApiUri"]!;
 
-builder.Services
-.AddHttpClient<IMovieService, ApiMovieService>(opt =>
-opt.BaseAddress = new Uri(UriData.ApiUri));
+builder.Services.AddHttpClient<IMovieService, ApiMovieService>(opt => opt.BaseAddress = new Uri(UriData.ApiUri));
+
+builder.Services.AddHttpClient<IGenreService, ApiGenreService>(opt => opt.BaseAddress = new Uri(UriData.ApiUri));
 
 var app = builder.Build();
 
@@ -42,5 +41,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();

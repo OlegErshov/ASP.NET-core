@@ -14,6 +14,7 @@ namespace WEB.API.Data
 
             // Получение урл адреса 
             string? url = app.Configuration.GetValue<string>("AppUrl");
+            await context.Database.EnsureDeletedAsync();
             // Выполнение миграций
             await context.Database.MigrateAsync();
 
@@ -23,8 +24,6 @@ namespace WEB.API.Data
                 NormalizedName = "action"
 
             });
-
-            
 
             context.Add(new Genre
             {
@@ -59,7 +58,6 @@ namespace WEB.API.Data
 
             context.Add(new Movie
             {
-
                 Title = "Iron Man 2",
                 Description = "len pisat",
                 TicketPrice = 3,

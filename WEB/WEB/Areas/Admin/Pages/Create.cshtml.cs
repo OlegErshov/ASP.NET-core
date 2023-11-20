@@ -31,7 +31,9 @@ namespace WEB.Areas.Admin.Pages
 
         [BindProperty]
         public Movie Movie { get; set; } = default!;
-        
+
+        [BindProperty]
+        public IFormFile? Image { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -43,8 +45,7 @@ namespace WEB.Areas.Admin.Pages
                 return Page();
             }
 
-            await _context.CreateProductAsync(Movie, null) ;
-            await _context.SaveChangesAsync();
+            await _context.CreateProductAsync(Movie, Image) ;
 
             return RedirectToPage("./Index");
         }

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using Azure.Core;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -31,23 +32,28 @@ namespace WEB.Services.ApiServices
         public async  Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile? formFile)
         {
             
-                var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "Dishes");
-                var response = await _httpClient.PostAsJsonAsync(uri,product,_serializerOptions);
+            var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "movies");
+            var response = await _httpClient.PostAsJsonAsync(uri,product,_serializerOptions);
             if (response.IsSuccessStatusCode)
+            {
+               var data = await response
+                         .Content
+                         .ReadFromJsonAsync<ResponseData<Movie>>
+                         (_serializerOptions);
+
+                if (formFile is not null)
                 {
-                     var data = await response
-                               .Content
-                               .ReadFromJsonAsync<ResponseData<Movie>>
-                               (_serializerOptions);
-                                return data; // dish;
+                    var id = data.Data.Id;
+                    await SaveImageAsync(id,formFile);
                 }
-                                _logger
-                                .LogError($"-----> object not created. Error:{ response.StatusCode.ToString()}");
-                return new ResponseData<Movie>
-                {
-                    Success = false,
-                    ErrorMessage = $"Объект не добавлен. Error:{ response.StatusCode.ToString() }"
-                };
+                return data; // movie;
+            }
+            _logger.LogError($"-----> object not created. Error:{ response.StatusCode.ToString()}");
+            return new ResponseData<Movie>
+            { 
+                Success = false,
+                ErrorMessage = $"Объект не добавлен. Error:{ response.StatusCode.ToString() }"
+            };
            
         }
 
@@ -66,16 +72,17 @@ namespace WEB.Services.ApiServices
             // подготовка URL запроса
             var urlString
             = new
-            StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}dishes/");
+            StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}movies/");
+            
+            // добавить номер страницы в маршрут
+            if (pageNo >= 1)
+            {
+                urlString.Append($"page{pageNo}?");
+            };
             // добавить категорию в маршрут
             if (categoryNormalizedName != null)
             {
-                urlString.Append($"{categoryNormalizedName}/");
-            };
-            // добавить номер страницы в маршрут
-            if (pageNo > 1)
-            {
-                urlString.Append($"page{pageNo}");
+                urlString.Append($"{categoryNormalizedName}");
             };
             // добавить размер страницы в строку запроса
             if (!_pageSize.Equals("3"))
@@ -114,9 +121,19 @@ namespace WEB.Services.ApiServices
             throw new NotImplementedException();
         }
 
-        public Task SaveChangesAsync()
-        { 
-            throw new NotImplementedException();
+
+        private async Task SaveImageAsync(int id, IFormFile image)
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}Dishes/{id}")
+            };
+            var content = new MultipartFormDataContent();
+            var streamContent = new StreamContent(image.OpenReadStream());
+            content.Add(streamContent, "formFile", image.FileName);
+            request.Content = content;
+            await _httpClient.SendAsync(request);
         }
     }
 }

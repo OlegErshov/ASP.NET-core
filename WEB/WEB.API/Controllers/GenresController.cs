@@ -11,7 +11,7 @@ using WEB.Domain.Entities;
 
 namespace WEB.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/genres")]
     [ApiController]
     public class GenresController : ControllerBase
     {
@@ -26,11 +26,6 @@ namespace WEB.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Genre>>> GetGenres()
         {
-          //if (_context.Genres == null)
-          //{
-          //    return NotFound();
-          //}
-
             return Ok(await _context.GetCategoryListAsync());
         }
 

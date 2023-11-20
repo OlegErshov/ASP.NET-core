@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using WEB.API.Data;
 using WEB.API.Services.MovieServices;
 using WEB.Domain.Entities;
+using WEB.Domain.Models;
 
 namespace WEB.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/movies")]
     [ApiController]
     public class MoviesController : ControllerBase
     {
@@ -26,16 +27,11 @@ namespace WEB.API.Controllers
         // GET: api/Movies
         [HttpGet]
         
-        [Route("page_{pageNo:int}")]
+        [Route("page{pageNo:int}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(string? genre,
                                                                       int pageNo = 1,
                                                                       int pageSize = 3)
         {
-            //if (_context.Movies == null)
-            //{
-            //    return NotFound();
-            //}
-            //return await _context.Movies.ToListAsync();
             return Ok(await _context.GetProductListAsync(genre,pageNo,pageSize));
         }
 
@@ -43,10 +39,7 @@ namespace WEB.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            //if (_context.Movies == null)
-            //{
-            //    return NotFound();
-            //}
+      
             var movie = await _context.GetProductByIdAsync(id);
 
             if (movie == null)
@@ -55,6 +48,18 @@ namespace WEB.API.Controllers
             }
 
             return Ok(movie);
+        }
+
+        // POST: api/Dishes/5
+        [HttpPost("{id}")]
+        public async Task<ActionResult<ResponseData<string>>> PostImage(int id, IFormFile formFile)
+        {
+            var response = await _context.SaveImageAsync(id, formFile);
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
         }
 
         // PUT: api/Movies/5

@@ -1,10 +1,10 @@
 ﻿@page
-@model WEB.Areas.Admin.Pages.CreateModel
+@using WEB.Areas.Admin.Pages;
+@model CreateModel
 
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create</h1>
 
 <h4>Movie</h4>
@@ -37,9 +37,9 @@
                 <input asp-for="Movie.TicketPrice" class="form-control" />
                 <span asp-validation-for="Movie.TicketPrice" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="input-group mb-3">
                 <label asp-for="Movie.ImgSrc" class="control-label"></label>
-                <input asp-for="Movie.ImgSrc" class="form-control" />
+                <input asp-for="Movie.ImgSrc" type="file" class="form-control" />
                 <span asp-validation-for="Movie.ImgSrc" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -12,9 +12,13 @@ namespace WEB.API.Services.MovieServices
     {
         private readonly int _maxPageSize = 20;
         AppDbContext _context;
-        public MovieService(AppDbContext context) 
+        IHttpContextAccessor _httpContextAccessor;
+        IWebHostEnvironment _environment;
+        public MovieService(AppDbContext context, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment environment) 
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _environment = environment;
         }
        
       //  private var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -84,9 +88,38 @@ namespace WEB.API.Services.MovieServices
         /// <param name="id">Id объекта</param>
         /// <param name="formFile">файл изображения</param>
         /// <returns>Url к файлу изображения</returns
-        public Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
+        public async Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
         {
-            throw new NotImplementedException();
+            var responseData = new ResponseData<string>();
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null)
+            {
+                responseData.Success = false;
+                responseData.ErrorMessage = "No item found";
+                return responseData;
+            }
+            var host = "https://" + _httpContextAccessor.HttpContext.Request.Host;
+            var imageFolder = Path.Combine(_environment.WebRootPath, "Images");
+            if (formFile != null)
+            {
+                // Удалить предыдущее изображение
+                if (!String.IsNullOrEmpty(movie.ImgSrc))
+                {
+                    var prevImage = Path.GetFileName(movie.ImgSrc);
+                    
+                }
+                // Создать имя файла
+                var ext = Path.GetExtension(formFile.FileName);
+                var fName = Path.ChangeExtension(Path.GetRandomFileName(), ext);
+
+                // Сохранить файл
+                
+                // Указать имя файла в объекте
+                movie.ImgSrc = $"{host}/Images/{fName}";
+                await _context.SaveChangesAsync();
+            }
+            responseData.Data = movie.ImgSrc;
+            return responseData;
         }
     }
 }

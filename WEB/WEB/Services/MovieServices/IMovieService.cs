@@ -42,7 +42,5 @@ namespace WEB.Services.MovieServices
         /// <returns>Созданный объект</returns>
         public Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile?
         formFile);
-
-        public Task SaveChangesAsync();
     }
 }

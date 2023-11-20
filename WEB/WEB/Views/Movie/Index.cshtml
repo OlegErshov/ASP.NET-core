@@ -1,10 +1,10 @@
-@model WEB.Domain.Models.ListModel<Movie>
+п»ї@model WEB.Domain.Models.ListModel<Movie>
 
 @{
     
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
-    string? category = request.RouteValues["category"]?.ToString();
+    string? category = request.RouteValues["genre"]?.ToString();
     int prev = Model.CurrentPage == 1
             ? 1
             : Model.CurrentPage - 1;
@@ -15,7 +15,7 @@
 
 
     <h1>
-        Киноновинки 
+        РЎРїРёСЃРѕРє С„РёР»СЊРјРѕРІ
     </h1>
 
     <div class="container">
@@ -28,7 +28,7 @@
                     <li>
                         <a class="dropdown-item"
                            asp-controller="Movie"
-                           asp-route-genre=@null>Все</a>
+                           asp-route-genre=@null>genres</a>
                     </li>
                     @foreach (var item in ViewBag.Genres)
                     {
@@ -46,7 +46,7 @@
             </div>
 
 
-        </div><!-- выбор категории -->
+        </div>
 
         <div class="row">
 
@@ -63,7 +63,7 @@
 
                         </div>
                         <div class="card-footer">
-                            <a asp-controller="Cart" asp-action="Add"
+                           <a asp-controller="Cart" asp-action="Add"
                            asp-route-id=@item.Id
                            asp-route-returnurl="@returnUrl"
                            class="btn btn-primary">Go to Cart</a>

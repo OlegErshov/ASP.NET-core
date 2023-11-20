@@ -57,7 +57,7 @@ namespace WEB.Areas.Admin.Pages
 
             try
             {
-                await _context.SaveChangesAsync();
+               // await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {

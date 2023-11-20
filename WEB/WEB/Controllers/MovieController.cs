@@ -9,8 +9,6 @@ namespace WEB.Controllers
     {
         IMovieService _movieService;
         IGenreService _genreService;
-
-        
         public Genre CurrentGenre { get; set; }
 
         List<Genre> Genres { get; set; }
@@ -21,17 +19,19 @@ namespace WEB.Controllers
             _genreService = genreService;
         }
 
-        public async Task<IActionResult> Index(string? genre,int pageNo)
+        public async Task<IActionResult> Index(string? genre,int pageNo = 1)
         {
             Genres = _genreService.GetCategoryListAsync().Result.Data;
             ViewBag.Genres = Genres;
 
             CurrentGenre = _genreService.GetCategoryListAsync().Result.Data?.
                 Find(x => x.NormalizedName.Equals(genre));
+
             if(CurrentGenre == null)
             {
-                CurrentGenre = _genreService.GetCategoryListAsync().Result.Data.
-                    Find(x => x.NormalizedName.Equals("action"));
+                // Здесь налл
+                CurrentGenre = _genreService?.GetCategoryListAsync()?.Result?.Data[0];
+                    
             }
 
             ViewBag.CurrentGenre = CurrentGenre;
