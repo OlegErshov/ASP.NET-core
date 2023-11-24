@@ -13,14 +13,14 @@ namespace WEB.API.Services.MovieServices
             ///фильтрации</param>
             /// <param name="pageNo">номер страницы списка</param>
             /// <returns></returns>
-            public  Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string?
+            public  Task<ResponseData<ListModel<Movie>>> GetMovieListAsync(string?
             categoryNormalizedName, int pageNo = 1, int pageSize = 3);
             /// <summary>
             /// Поиск объекта по Id
             /// </summary>
             /// <param name="id">Идентификатор объекта</param>
             /// <returns>Найденный объект или null, если объект не найден</returns>
-            public Task<ResponseData<Movie>> GetProductByIdAsync(int id);
+            public Task<ResponseData<Movie>> GetMovieByIdAsync(int id);
             /// <summary>
             /// Обновление объекта
             /// </summary>
@@ -28,21 +28,19 @@ namespace WEB.API.Services.MovieServices
             /// <param name="product">объект с новыми параметрами</param>
             /// <param name="formFile">Файл изображения</param>
             /// <returns></returns>
-            public Task UpdateProductAsync(int id, Movie product, IFormFile? formFile);
+            public Task UpdateMovieAsync(int id, Movie product, IFormFile? formFile);
             /// <summary>
             /// Удаление объекта
             /// </summary>
             /// <param name="id">Id удаляемомго объекта</param>
             /// <returns></returns>
-            public Task DeleteProductAsync(int id);
+            public Task DeleteMovieAsync(int id);
             /// <summary>
             /// Создание объекта
             /// </summary>
             /// <param name="product">Новый объект</param>
-            /// <param name="formFile">Файл изображения</param>
             /// <returns>Созданный объект</returns>
-            public Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile?
-            formFile);
+            public Task<ResponseData<Movie>> CreateMovieAsync(Movie product);
             /// <summary>
             /// Сохранить файл изображения для объекта
             /// </summary>

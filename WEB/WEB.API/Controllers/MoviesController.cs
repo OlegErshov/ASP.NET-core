@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WEB.API.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using WEB.API.Services.MovieServices;
 using WEB.Domain.Entities;
 using WEB.Domain.Models;
@@ -32,7 +24,7 @@ namespace WEB.API.Controllers
                                                                       int pageNo = 1,
                                                                       int pageSize = 3)
         {
-            return Ok(await _context.GetProductListAsync(genre,pageNo,pageSize));
+            return Ok(await _context.GetMovieListAsync(genre,pageNo,pageSize));
         }
 
         // GET: api/Movies/5
@@ -40,7 +32,7 @@ namespace WEB.API.Controllers
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
       
-            var movie = await _context.GetProductByIdAsync(id);
+            var movie = await _context.GetMovieByIdAsync(id);
 
             if (movie == null)
             {
@@ -98,14 +90,27 @@ namespace WEB.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
-            //if (_context.Movies == null)
-            //{
-            //    return Problem("Entity set 'AppDbContext.Movies'  is null.");
-            //}
-            await _context.CreateProductAsync(movie,null);
-            
+            if (movie is null)
+            {
+                return BadRequest(new ResponseData<Movie>()
+                {
+                    Data = null,
+                    Success = false,
+                    ErrorMessage = "movie is null"
+                });
+            }
+            var response = await _context.CreateMovieAsync(movie);
 
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+            if (!response.Success)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+
+            return CreatedAtAction("GetMovie", new { id = movie.Id }, new ResponseData<Movie>()
+            {
+                Data = movie,
+                Success = true
+            });
         }
 
         // DELETE: api/Movies/5
@@ -116,14 +121,14 @@ namespace WEB.API.Controllers
             //{
             //    return NotFound();
             //}
-            var movie = await _context.GetProductByIdAsync(id);
+            var movie = await _context.GetMovieByIdAsync(id);
             if (movie == null)
             {
                 return NotFound();
             }
             // Зачем тут проверять на наличие, если это можно сделать в сервисе
 
-            await _context.DeleteProductAsync(id);
+            await _context.DeleteMovieAsync(id);
             // Не забыть добавить сохранение в бд в методах сервиса
 
             return NoContent();
@@ -131,7 +136,7 @@ namespace WEB.API.Controllers
 
         private bool MovieExists(int id)
         {
-            return _context.GetProductByIdAsync(id) == null;
+            return _context.GetMovieByIdAsync(id) == null;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace WEB.Areas.Admin.Pages
                 return Page();
             }
 
-            //_context.Attach(Movie).State = EntityState.Modified; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //_context.Attach(Movie).State = EntityState.Modified; 
 
             try
             {

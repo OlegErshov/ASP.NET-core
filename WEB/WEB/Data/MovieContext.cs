@@ -10,6 +10,7 @@ using WEB.Domain.Entities;
         public MovieContext (DbContextOptions<MovieContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<WEB.Domain.Entities.Movie> Movie { get; set; } = default!;

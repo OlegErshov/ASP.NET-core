@@ -33,6 +33,7 @@ namespace WEB.Services.ApiServices
         {
             
             var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "movies");
+
             var response = await _httpClient.PostAsJsonAsync(uri,product,_serializerOptions);
             if (response.IsSuccessStatusCode)
             {
@@ -46,6 +47,7 @@ namespace WEB.Services.ApiServices
                     var id = data.Data.Id;
                     await SaveImageAsync(id,formFile);
                 }
+
                 return data; // movie;
             }
             _logger.LogError($"-----> object not created. Error:{ response.StatusCode.ToString()}");
@@ -127,7 +129,7 @@ namespace WEB.Services.ApiServices
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}Dishes/{id}")
+                RequestUri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}Movies/{id}")
             };
             var content = new MultipartFormDataContent();
             var streamContent = new StreamContent(image.OpenReadStream());

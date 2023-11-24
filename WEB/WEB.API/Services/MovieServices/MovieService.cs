@@ -22,22 +22,40 @@ namespace WEB.API.Services.MovieServices
         }
        
       //  private var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        public Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile? formFile)
+        public async  Task<ResponseData<Movie>> CreateMovieAsync(Movie movie)
+        {
+            await _context.Movies.AddAsync(movie);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return new ResponseData<Movie>()
+                {
+                    Data = null,
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+            return new ResponseData<Movie>()
+            {
+                Data = movie,
+                Success = true
+            };
+        }
+
+        public Task DeleteMovieAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteProductAsync(int id)
+        public Task<ResponseData<Movie>> GetMovieByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ResponseData<Movie>> GetProductByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1,int pageSize = 3)
+        public async Task<ResponseData<ListModel<Movie>>> GetMovieListAsync(string? categoryNormalizedName, int pageNo = 1,int pageSize = 3)
         {
             if (pageSize > _maxPageSize)
                 pageSize = _maxPageSize;
@@ -78,7 +96,7 @@ namespace WEB.API.Services.MovieServices
             return response;
         }
 
-        public Task UpdateProductAsync(int id, Movie product, IFormFile? formFile)
+        public Task UpdateMovieAsync(int id, Movie product, IFormFile? formFile)
         {
             throw new NotImplementedException();
         }
