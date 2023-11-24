@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime;
 using WEB.API.Data;
 using WEB.API.Services.GenreServices;
 using WEB.API.Services.MovieServices;
@@ -22,7 +22,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+builder.Services
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(opt =>
+{
+    opt.Authority = builder
+    .Configuration
+    .GetSection("isUri").Value;
+    opt.TokenValidationParameters.ValidateAudience = false;
+    opt.TokenValidationParameters.ValidTypes =
+    new[] { "at+jwt" };
+});
 
 
 
@@ -42,6 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

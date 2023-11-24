@@ -19,6 +19,28 @@ builder.Services.AddHttpClient<IMovieService, ApiMovieService>(opt => opt.BaseAd
 
 builder.Services.AddHttpClient<IGenreService, ApiGenreService>(opt => opt.BaseAddress = new Uri(UriData.ApiUri));
 
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultScheme = "cookie";
+    opt.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("cookie")
+.AddOpenIdConnect("oidc", options =>
+{
+            options.Authority =
+    builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];
+            options.ClientId =
+    builder.Configuration["InteractiveServiceSettings:ClientId"];
+            options.ClientSecret =
+    builder.Configuration["InteractiveServiceSettings:ClientSecret"];
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.ResponseType = "code";
+            options.ResponseMode = "query";
+            options.SaveTokens = true;
+
+});
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,9 +59,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+app.MapRazorPages().RequireAuthorization();
 app.Run();

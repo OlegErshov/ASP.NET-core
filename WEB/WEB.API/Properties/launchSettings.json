@@ -1,5 +1,6 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
+  "isUri": "https://localhost:7003/",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,

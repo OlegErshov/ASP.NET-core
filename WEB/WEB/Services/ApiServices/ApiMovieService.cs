@@ -1,5 +1,7 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Authentication;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -15,9 +17,11 @@ namespace WEB.Services.ApiServices
         int _pageSize;
         JsonSerializerOptions _serializerOptions;
         ILogger _logger;
+        HttpContext _httpContext;
         public ApiMovieService(HttpClient httpClient,
                                 IConfiguration configuration,
-                                ILogger<ApiMovieService> logger)
+                                ILogger<ApiMovieService> logger,
+                                IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _pageSize = configuration.GetValue<int>("ItemsPerPage");
@@ -27,12 +31,17 @@ namespace WEB.Services.ApiServices
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             _logger = logger;
+            _httpContext = httpContextAccessor.HttpContext;
         }
             
         public async  Task<ResponseData<Movie>> CreateProductAsync(Movie product, IFormFile? formFile)
         {
             
             var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "movies");
+
+            var token = await _httpContext.GetTokenAsync("access_token");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",token);
 
             var response = await _httpClient.PostAsJsonAsync(uri,product,_serializerOptions);
             if (response.IsSuccessStatusCode)

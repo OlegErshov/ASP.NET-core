@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WEB.API.Services.MovieServices;
 using WEB.Domain.Entities;
 using WEB.Domain.Models;
@@ -43,6 +44,7 @@ namespace WEB.API.Controllers
         }
 
         // POST: api/Dishes/5
+        [Authorize]
         [HttpPost("{id}")]
         public async Task<ActionResult<ResponseData<string>>> PostImage(int id, IFormFile formFile)
         {
@@ -87,6 +89,7 @@ namespace WEB.API.Controllers
 
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
@@ -114,6 +117,7 @@ namespace WEB.API.Controllers
         }
 
         // DELETE: api/Movies/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
