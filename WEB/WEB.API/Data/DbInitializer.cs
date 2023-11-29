@@ -65,6 +65,24 @@ namespace WEB.API.Data
                 GenreId = context.Genres.FirstOrDefault(c => c.NormalizedName.Equals("action")).Id
             }) ;
 
+            context.Add(new Movie
+            {
+                Title = "Iron Man 3",
+                Description = "Last iron man movie",
+                TicketPrice = 10,
+                ImgSrc = url + "/images/iron-man2.jpg",
+                GenreId = context.Genres.FirstOrDefault(c => c.NormalizedName.Equals("drama")).Id
+            });
+
+            context.Add(new Movie
+            {
+                Title = "Avengers",
+                Description = "AVENGERS assemble",
+                TicketPrice = 100,
+                ImgSrc = url + "/images/iron-man2.jpg",
+                GenreId = context.Genres.FirstOrDefault(c => c.NormalizedName.Equals("action")).Id
+            });
+
             await context.SaveChangesAsync();
         }
     }

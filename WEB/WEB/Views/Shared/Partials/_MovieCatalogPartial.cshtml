@@ -1,0 +1,42 @@
+﻿
+<div id="movie-list">
+    <div class="row">
+        @foreach (var item in Model.Movies)
+        {
+
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="card" style="width: 18rem;">
+                    <img width="180" height="220" src="@item.ImgSrc" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">@item.Description</p>
+
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="Cart" asp-action="Add"
+                           asp-route-id=@item.Id
+                       
+                           class="btn btn-primary">Go to Cart</a>
+                    </div>
+                </div>
+            </div> 
+        }
+    </div>
+    @if (Model.IsAdmin)
+    {
+        <pager current-page="@Model.CurrentPage"
+               total-pages="@Model.TotalPages"
+               admin="true">
+        </pager>
+    }
+    else
+    {
+        <pager current-page="@Model.CurrentPage"
+               total-pages="@Model.TotalPages"
+               genre=@Model.Genre>
+        </pager>
+    }
+</div>
+@section Scripts{
+    <script src="~/js/site.js"></script>
+}

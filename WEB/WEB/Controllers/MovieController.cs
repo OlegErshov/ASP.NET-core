@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEB.Domain.Entities;
+using WEB.Extensions;
 using WEB.Services.GenreServices;
 using WEB.Services.MovieServices;
 
@@ -22,7 +23,6 @@ namespace WEB.Controllers
         public async Task<IActionResult> Index(string? genre,int pageNo = 1)
         {
             Genres = _genreService.GetCategoryListAsync().Result.Data;
-            ViewBag.Genres = Genres;
 
             CurrentGenre = _genreService.GetCategoryListAsync().Result.Data?.
                 Find(x => x.NormalizedName.Equals(genre));
@@ -33,14 +33,27 @@ namespace WEB.Controllers
                 CurrentGenre = _genreService?.GetCategoryListAsync()?.Result?.Data[0];
                     
             }
+            var movieResponse = await _movieService.GetProductListAsync(CurrentGenre.NormalizedName, pageNo);
 
-            ViewBag.CurrentGenre = CurrentGenre;
+            ViewData["genres"] = Genres;
+            ViewData["currentGenre"] = CurrentGenre;
+            ViewData["currentPage"] = movieResponse.Data!.CurrentPage;
+            ViewData["totalPages"] = movieResponse.Data.TotalPages;
 
-            var productResponse =
-            await _movieService.GetProductListAsync(CurrentGenre.NormalizedName,pageNo);
-            if (!productResponse.Success)
-                return NotFound(productResponse.ErrorMessage);
-            return View(productResponse.Data);
+            if (Request.isAjaxRequest())
+            {
+                return PartialView("Partials/_MovieCatalogPartial", new
+                {
+                    Movie = movieResponse.Data!.Items,
+                    Genre = genre,
+                    movieResponse.Data!.CurrentPage,
+                    movieResponse.Data!.TotalPages,
+                    ReturnUrl = Request.Path + Request.QueryString.ToUriComponent(),
+                    IsAdmin = false
+                });
+            }
+
+            return View(movieResponse.Data!.Items);
         }
     }
 }

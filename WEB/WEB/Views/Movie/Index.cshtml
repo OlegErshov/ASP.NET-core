@@ -1,112 +1,60 @@
-﻿@model WEB.Domain.Models.ListModel<Movie>
+﻿@model List<Movie>
 
 @{
-    
+    ViewData["Title"] = "Каталог";
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
     string? category = request.RouteValues["genre"]?.ToString();
-    int prev = Model.CurrentPage == 1
-            ? 1
-            : Model.CurrentPage - 1;
-    int next = Model.CurrentPage == Model.TotalPages
-            ? Model.TotalPages
-            : Model.CurrentPage + 1;
+    var genres = ViewData["genres"] as IEnumerable<Genre>;
+    string? genre = request.Query["genre"];
+    var currentGenre = ViewData["currentGenre"];
+    var currentPage = ViewData["currentPage"] as int? ?? 1;
+    var totalPages = ViewData["totalPages"] as int? ?? 1;
+    int prev = currentPage == 1 ? 1 : currentPage - 1;
+    int next = currentPage == totalPages ? totalPages : currentPage + 1;
 }
 
 
-    <h1>
-        Список фильмов
-    </h1>
+<h1>Каталог</h1>
 
-    <div class="container">
-        <div class="col-2 border-2">
-            <div class="dropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                    @ViewBag.CurrentGenre.Name
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <li>
-                        <a class="dropdown-item"
-                           asp-controller="Movie"
-                           asp-route-genre=@null>genres</a>
-                    </li>
-                    @foreach (var item in ViewBag.Genres)
+<div class="col-2 border-2">
+    <ul class="nav">
+        <li class="nav-item dropdown">
+            <button class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                @currentGenre
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" asp-controller="movie" asp-route-genre=@null>Все</a>
+                </li>
+                @if (genres != null)
+                {
+                    foreach (var item in genres)
                     {
                         <li>
-                            <a class="dropdown-item"
-                           asp-controller="Movie"
-                           asp-action="Index"
-                           asp-route-genre="@item.NormalizedName">
+                            <a class="dropdown-item" asp-controller="movie" asp-route-genre="@item.NormalizedName">
                                 @item.Name
                             </a>
                         </li>
                     }
-                </ul>
-
-            </div>
-
-
-        </div>
-
-        <div class="row">
-
-            @foreach (var item in Model.Items)
+                }
+            </ul>
+        </li>
+    </ul>
+</div>
+    <div>
+        @{
+        await Html.RenderPartialAsync("Partials/_MovieCatalogPartial", new
             {
-
-                <div class="col-12 col-sm-6 col-lg-4">
-
-                    <div class="card" style="width: 18rem;">
-                        <img width="180" height="220" src="@item.ImgSrc" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Title</h5>
-                            <p class="card-text">@item.Description</p>
-
-                        </div>
-                        <div class="card-footer">
-                           <a asp-controller="Cart" asp-action="Add"
-                           asp-route-id=@item.Id
-                           asp-route-returnurl="@returnUrl"
-                           class="btn btn-primary">Go to Cart</a>
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-            }
-        </div>
-
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            
-            <li class="page-item">
-              <a class="page-link" asp-controller="Movie"
-                           asp-action="Index"
-                           asp-route-pageNo="@prev"
-                           asp-route-genre="@category" 
-                           aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            @for(int i = 1; i <= Model.TotalPages;i++)
-            {
-                <li class="page-item"><a class="page-link" asp-controller="Movie"
-                           asp-action="Index"
-                           asp-route-pageNo="@i"
-                           asp-route-genre="@category">@i</a></li>
-            }
-            <li class="page-item">
-              <a class="page-link"  aria-label="Next"
-                   asp-controller="Movie"
-                   asp-action="Index"
-                   asp-route-pageNo="@next"
-                   asp-route-genre="@category">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+                Movies = Model,
+                Genre = genre,
+                CurrentPage = currentPage,
+                TotalPages = totalPages,
+                ReturnUrl = returnUrl,
+                IsAdmin = false
+            });
+        }
     </div>
     
 
