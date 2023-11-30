@@ -50,9 +50,26 @@ namespace WEB.API.Services.MovieServices
             throw new NotImplementedException();
         }
 
-        public Task<ResponseData<Movie>> GetMovieByIdAsync(int id)
+        public async Task<ResponseData<Movie>> GetMovieByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var data = await _context.Movies.SingleOrDefaultAsync(m => m.Id == id);
+
+            if(data is not null)
+            {
+                return new ResponseData<Movie>
+                {
+                    Data = data,
+                    Success = true
+                };
+            }
+            else
+            {
+                return new ResponseData<Movie>()
+                {
+                    Success = false,
+                    ErrorMessage = $"This movie with id-{id} doesn't exist in database or in database exists two or more entities with this id"
+                };
+            }
         }
 
         public async Task<ResponseData<ListModel<Movie>>> GetMovieListAsync(string? categoryNormalizedName, int pageNo = 1,int pageSize = 3)

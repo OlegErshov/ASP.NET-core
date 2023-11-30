@@ -1,5 +1,4 @@
-﻿
-<div id="movie-list">
+﻿<div id="movie-list">
     <div class="row">
         @foreach (var item in Model.Movies)
         {
@@ -14,9 +13,8 @@
                     </div>
                     <div class="card-footer">
                         <a asp-controller="Cart" asp-action="Add"
-                           asp-route-id=@item.Id
-                       
-                           class="btn btn-primary">Go to Cart</a>
+                           asp-route-id=@item.Id asp-route-returnUrl=@Model.ReturnUrl
+                           class="btn btn-primary">Add to Cart</a>
                     </div>
                 </div>
             </div> 

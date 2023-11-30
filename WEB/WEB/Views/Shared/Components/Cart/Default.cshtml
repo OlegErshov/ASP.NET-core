@@ -1,11 +1,8 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿﻿@using WEB.Domain.Models;
+@model Cart﻿
 
-
-
-<a asp-controller="Cart" asp-action="Index" class="navbar-text ms-auto">
-    0.00 <i class="fa-solid fa-cart-shopping"></i>(0)
+<a class="navbar-text ms-auto" asp-controller="Cart" asp-action="Index">
+    @Model.TotalPrice руб
+    <i class="fa-solid fa-cart-shopping"></i>
+    (@Model.Count)
 </a>

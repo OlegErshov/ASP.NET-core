@@ -6,6 +6,7 @@ using WEB.Services.MovieServices;
 
 namespace WEB.Controllers
 {
+    
     public class MovieController : Controller
     {
         IMovieService _movieService;
@@ -14,12 +15,15 @@ namespace WEB.Controllers
 
         List<Genre> Genres { get; set; }
 
+        
         public MovieController(IMovieService movieService, IGenreService genreService)
         {
             _movieService = movieService;
             _genreService = genreService;
         }
 
+        [Route("Сatalog")]
+        [Route("Catalog/{genre}")]
         public async Task<IActionResult> Index(string? genre,int pageNo = 1)
         {
             Genres = _genreService.GetCategoryListAsync().Result.Data;

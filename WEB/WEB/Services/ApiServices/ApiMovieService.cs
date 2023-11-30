@@ -73,17 +73,40 @@ namespace WEB.Services.ApiServices
             throw new NotImplementedException();
         }
 
-        public Task<ResponseData<Movie>> GetProductByIdAsync(int? id)
+        public async Task<ResponseData<Movie>> GetProductByIdAsync(int? id)
         {
-            throw new NotImplementedException();
+            var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}movies/{id}");
+
+            var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    return await response.Content.ReadFromJsonAsync<ResponseData<Movie>>(_serializerOptions);
+                }
+                catch (JsonException ex)
+                {
+                    _logger.LogError($"-----> Ошибка: {ex.Message}");
+                    return new ResponseData<Movie>
+                    {
+                        Success = false,
+                        ErrorMessage = $"Ошибка: {ex.Message}"
+                    };
+                }
+            }
+            _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode.ToString()}");
+            return new ResponseData<Movie>
+            {
+                Success = false,
+                ErrorMessage = $"Данные не получены от сервера. Error:{response.StatusCode.ToString()}"
+            };
         }
 
         public async Task<ResponseData<ListModel<Movie>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1)
         {
             // подготовка URL запроса
-            var urlString
-            = new
-            StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}movies/");
+            var urlString = new StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}movies/");
             
             // добавить номер страницы в маршрут
             if (pageNo >= 1)
@@ -101,8 +124,7 @@ namespace WEB.Services.ApiServices
                 urlString.Append(QueryString.Create("pageSize", _pageSize.ToString()));
             }
             // отправить запрос к API
-            var response = await _httpClient.GetAsync(
-            new Uri(urlString.ToString()));
+            var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
             if (response.IsSuccessStatusCode)
             {
                 try

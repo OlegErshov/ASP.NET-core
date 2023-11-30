@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WEB.UriData;
 using WEB.Services.ApiServices;
+using WEB.Services.CartServices;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieContext>(options =>
@@ -12,6 +13,10 @@ builder.Services.AddDbContext<MovieContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddScoped(SessionCart.GetCart);
 
 UriData.ApiUri = builder.Configuration.GetSection("UriData")[key: "ApiUri"]!;
 
@@ -41,6 +46,7 @@ builder.Services.AddAuthentication(opt =>
 });
 builder.Services.AddHttpContextAccessor();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +61,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WEB.Domain.Models;
 
 namespace WEB.Components;
 
-//[ViewComponent]
 public class CartViewComponent : ViewComponent
 {
-    public IViewComponentResult Invoke(double price)
+    private readonly Cart _sessionCart;
+
+    public CartViewComponent(Cart sessionCart)
     {
-        return View();
+        _sessionCart = sessionCart;
+    }
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        return await Task.FromResult<IViewComponentResult>(View(_sessionCart));
     }
 }

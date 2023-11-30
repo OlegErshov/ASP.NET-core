@@ -9,7 +9,7 @@
         public int? GenreId { get; set; }
 
         public Genre? Genre { get; set; }
-        public double? TicketPrice { get; set; }
+        public double TicketPrice { get; set; }
         public string? ImgSrc { get; set; }
     }
 }
