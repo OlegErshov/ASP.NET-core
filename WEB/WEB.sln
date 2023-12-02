@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB.Domain", "WEB.Domain\WE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB.API", "WEB.API\WEB.API.csproj", "{FD77DE40-F051-4DB6-95D7-11304ADA10B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB.IdentityServer", "WEB.IdentityServer\WEB.IdentityServer.csproj", "{14975C01-2261-47B1-AB81-3442BC809831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB.IdentityServer", "WEB.IdentityServer\WEB.IdentityServer.csproj", "{14975C01-2261-47B1-AB81-3442BC809831}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB.Tests", "WEB.Tests\WEB.Tests.csproj", "{B11ABD09-0D86-42A3-B6AE-C01303EA771F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{14975C01-2261-47B1-AB81-3442BC809831}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14975C01-2261-47B1-AB81-3442BC809831}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14975C01-2261-47B1-AB81-3442BC809831}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B11ABD09-0D86-42A3-B6AE-C01303EA771F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B11ABD09-0D86-42A3-B6AE-C01303EA771F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B11ABD09-0D86-42A3-B6AE-C01303EA771F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B11ABD09-0D86-42A3-B6AE-C01303EA771F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

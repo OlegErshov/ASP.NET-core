@@ -14,6 +14,7 @@ namespace WEB.API.Services.MovieServices
         AppDbContext _context;
         IHttpContextAccessor _httpContextAccessor;
         IWebHostEnvironment _environment;
+        public int MaxPageSize { get; private set; } = 3;
         public MovieService(AppDbContext context, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment environment) 
         {
             _context = context;

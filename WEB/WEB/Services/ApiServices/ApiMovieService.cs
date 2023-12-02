@@ -18,6 +18,7 @@ namespace WEB.Services.ApiServices
         JsonSerializerOptions _serializerOptions;
         ILogger _logger;
         HttpContext _httpContext;
+       
         public ApiMovieService(HttpClient httpClient,
                                 IConfiguration configuration,
                                 ILogger<ApiMovieService> logger,

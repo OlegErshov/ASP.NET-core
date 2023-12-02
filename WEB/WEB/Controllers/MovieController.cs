@@ -26,7 +26,13 @@ namespace WEB.Controllers
         [Route("Catalog/{genre}")]
         public async Task<IActionResult> Index(string? genre,int pageNo = 1)
         {
-            Genres = _genreService.GetCategoryListAsync().Result.Data;
+            
+            var genresResponse = await _genreService.GetCategoryListAsync();
+            // если список не получен, вернуть код 404
+            if (!genresResponse.Success)
+                return NotFound(genresResponse.ErrorMessage);
+
+            Genres = genresResponse.Data;
 
             CurrentGenre = _genreService.GetCategoryListAsync().Result.Data?.
                 Find(x => x.NormalizedName.Equals(genre));
@@ -37,7 +43,11 @@ namespace WEB.Controllers
                 CurrentGenre = _genreService?.GetCategoryListAsync()?.Result?.Data[0];
                     
             }
-            var movieResponse = await _movieService.GetProductListAsync(CurrentGenre.NormalizedName, pageNo);
+            var movieResponse = await _movieService.GetProductListAsync(genre, pageNo);
+
+            // если список не получен, вернуть код 404
+            if (!movieResponse.Success)
+                return NotFound(movieResponse.ErrorMessage);
 
             ViewData["genres"] = Genres;
             ViewData["currentGenre"] = CurrentGenre;
