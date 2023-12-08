@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using WEB.UriData;
 using WEB.Services.ApiServices;
 using WEB.Services.CartServices;
+using Serilog;
+using WEB.Midleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MovieContext>(options =>
@@ -47,6 +49,10 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.AddHttpContextAccessor();
 
 
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +63,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseMiddleware<LoggingMidleware>(logger);
 
 app.UseHttpsRedirection();
 

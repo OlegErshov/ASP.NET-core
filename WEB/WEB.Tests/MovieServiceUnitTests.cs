@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WEB.API.Data;
+﻿using WEB.API.Data;
 using WEB.API.Services.MovieServices;
 using WEB.Domain.Entities;
 using WEB.Domain.Models;
-using WEB.Services.ApiServices;
 
 namespace WEB.Tests
 {
