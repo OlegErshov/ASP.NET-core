@@ -34,7 +34,15 @@ builder.Services
     new[] { "at+jwt" };
 });
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorWasmPolicy", builder =>
+    {
+        builder.WithOrigins("https://localhost:7004")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 await DbInitializer.SeedData(app);
@@ -50,7 +58,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-
+app.UseCors("BlazorWasmPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 

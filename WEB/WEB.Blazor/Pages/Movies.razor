@@ -1,0 +1,50 @@
+﻿﻿
+@page "/movies"
+@page "/movies/{genre}"
+@* @attribute [Authorize] *@
+@using Domain.Entities;
+@using Microsoft.AspNetCore.Authorization;
+@using WEB.Blazor.Components
+@using WEB.Blazor.Services
+
+<PageTitle>Movies</PageTitle>
+<GenreSelector />
+<MovieList MovieSelected="FindMovie" />
+<Pager Genre="@Genre" TotalPages="@DataService.TotalPages" CurrentPage="@DataService.CurrentPage" />
+<MovieDetails SelectedMovie="@SelectedMovie" />
+
+@code {
+    [Inject]
+    public IDataService DataService { get; set; }
+
+    [Parameter]
+    public string Genre { get; set; }
+    public string? SelectedGenre { get; set; }
+    public Movie? SelectedMovie { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DataService.GetMovieListAsync(null);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await DataService.GetMovieListAsync(Genre);
+
+        if (Genre != null)
+        {
+            SelectedGenre = DataService?.Genres?.FirstOrDefault(c => c.NormalizedName.Equals(Genre))?.Name;
+        }
+        else
+        {
+            SelectedGenre = "Все";
+        }
+
+    }
+
+    public void FindMovie(int id)
+    {
+        SelectedMovie = DataService?.Movies?.FirstOrDefault(c => c.Id == id);
+        StateHasChanged();
+    }
+}

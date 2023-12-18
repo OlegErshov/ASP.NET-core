@@ -1,0 +1,9 @@
+2023-12-18 02:28:05.089 +03:00 [INF]  ---> request /lib/jquery/dist/jquery.min.js 304
+2023-12-18 02:28:05.089 +03:00 [INF]  ---> request /lib/font-awesome/css/all.min.css 304
+2023-12-18 02:28:05.154 +03:00 [INF]  ---> request /lib/font-awesome/webfonts/fa-brands-400.woff2 304
+2023-12-18 02:28:10.766 +03:00 [INF]  ---> request /Cart/add/1 302
+2023-12-18 11:19:08.393 +03:00 [INF]  ---> request /WEB.styles.css 304
+2023-12-18 11:57:52.482 +03:00 [INF]  ---> request /lib/font-awesome/css/all.min.css 304
+2023-12-18 11:57:52.482 +03:00 [INF]  ---> request /lib/jquery/dist/jquery.min.js 304
+2023-12-18 11:57:52.741 +03:00 [INF]  ---> request /lib/font-awesome/webfonts/fa-brands-400.woff2 304
+2023-12-18 13:39:24.569 +03:00 [INF]  ---> request /WEB.styles.css 304

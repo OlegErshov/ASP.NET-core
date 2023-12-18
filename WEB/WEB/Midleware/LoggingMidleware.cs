@@ -11,23 +11,19 @@ namespace WEB.Midleware
         private readonly Logger _logger;
         public LoggingMidleware(RequestDelegate next, Logger logger)
         {
-            this._next = next;
+            _next = next;
             _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
+            await _next(context);
             var statusCode = context.Response.StatusCode;
-            var responsePath = context.Request.Path;
-            
-            if(statusCode < 200 || statusCode > 300)
+            if (statusCode < 200 || statusCode >= 300)
             {
-                var stringBuilder = new StringBuilder();
-                
-                stringBuilder.Append(responsePath + statusCode);
-                _logger.Information(stringBuilder.ToString());
+                string logMessage = $" ---> request {context.Request.Path} {context.Response.StatusCode}";
+                _logger.Information(logMessage);
             }
-            await _next.Invoke(context);
         }
     }
 }

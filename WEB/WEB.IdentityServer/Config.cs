@@ -21,18 +21,6 @@ namespace WEB.IdentityServer
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-            // m2m client credentials flow client
-            new Client
-            {
-                ClientId = "m2m.client",
-                ClientName = "Client Credentials Client",
-
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-                AllowedScopes = { "api.read","api.write" }
-            },
-
             // interactive client using code flow + pkce
             new Client
             {
@@ -48,6 +36,18 @@ namespace WEB.IdentityServer
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "api.read", "api.write" }
             },
+            new Client
+                {
+                ClientId = "blazorApp",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                RedirectUris = {
+                "https://localhost:7004/authentication/login-callback" },
+                PostLogoutRedirectUris = {
+                "https://localhost:7004/authentication/logout-callback" },
+                AllowOfflineAccess = true,
+                AllowedScopes = { "openid", "profile", "api.read","api.write" }
+                }
             };
     }
 }

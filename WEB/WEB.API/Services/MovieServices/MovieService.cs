@@ -79,9 +79,7 @@ namespace WEB.API.Services.MovieServices
                 pageSize = _maxPageSize;
             var query = _context.Movies.AsQueryable();
             var dataList = new ListModel<Movie>();
-            query = query
-            .Where(d => categoryNormalizedName == null
-            || d.Genre.NormalizedName.Equals(categoryNormalizedName));
+            query = query.Where(d => categoryNormalizedName == null|| d.Genre.NormalizedName.Equals(categoryNormalizedName));
 
             // количество элементов в списке
             var count = await query.CountAsync();

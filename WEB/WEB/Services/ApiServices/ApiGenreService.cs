@@ -29,13 +29,10 @@ namespace WEB.Services.ApiServices
         public async Task<ResponseData<List<Genre>>> GetCategoryListAsync()
         {
             // подготовка URL запроса
-            var urlString
-            = new
-            StringBuilder($"{_httpClient.BaseAddress.AbsoluteUri}genres/");
-            
-            // отправить запрос к API
-            var response = await _httpClient.GetAsync(
-            new Uri(urlString.ToString()));
+            var uri = _httpClient.BaseAddress?.AbsoluteUri + "genres/";
+            var response = await _httpClient.GetAsync(uri);
+
+           
             if (response.IsSuccessStatusCode)
             {
                 try

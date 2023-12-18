@@ -1,0 +1,46 @@
+﻿@using WEB.Blazor.Services;
+@inject IDataService DataService;
+@implements IDisposable
+
+
+<h1>Pictures</h1>
+
+@if (!DataService.Success || DataService.Movies == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in DataService.Movies)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td> <button class="btn btn-primary" @onclick="() => MovieSelected.Invoke(movie.Id)">Подробнее</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        DataService.OnMovieChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        DataService.OnMovieChange -= StateHasChanged;
+    }
+
+    [Parameter]
+    public Action<int> MovieSelected { get; set; }
+}

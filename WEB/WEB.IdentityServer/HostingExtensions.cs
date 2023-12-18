@@ -55,6 +55,15 @@ namespace WEB.IdentityServer
                     options.ClientSecret = "copy client secret from Google here";
                 });
             builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("BlazorWasmPolicy", builder =>
+                {
+                    builder.WithOrigins("https://localhost:7004")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
             return builder.Build();
         }
 
@@ -69,8 +78,8 @@ namespace WEB.IdentityServer
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors("BlazorWasmPolicy");
             app.UseIdentityServer();
-
             app.UseAuthorization();
 
             app.MapControllers();

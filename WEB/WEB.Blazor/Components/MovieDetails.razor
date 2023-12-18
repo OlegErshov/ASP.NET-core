@@ -1,0 +1,23 @@
+﻿﻿@using Domain.Entities
+
+@if (SelectedMovie is not null)
+{
+	<div class="clothes-details-container">
+		<div class="clothes-image">
+			@if (!string.IsNullOrEmpty(SelectedMovie.ImgSrc))
+			{
+				<img src="@SelectedMovie.ImgSrc" alt="Image" width="400" height="300" />
+			}
+		</div>
+		<div class="pictures-info">
+			<h2>@SelectedMovie.Title</h2>
+			<p>@SelectedMovie.Description</p>
+			<p>Price: @SelectedMovie.TicketPrice</p>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public Movie? SelectedMovie { get; set; }
+}

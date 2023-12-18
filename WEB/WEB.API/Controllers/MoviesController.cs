@@ -19,8 +19,9 @@ namespace WEB.API.Controllers
 
         // GET: api/Movies
         [HttpGet]
-        
+        [Route("{genre}")]
         [Route("page{pageNo:int}")]
+        [Route("{genre}/page{pageNo}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(string? genre,
                                                                       int pageNo = 1,
                                                                       int pageSize = 3)
@@ -89,7 +90,7 @@ namespace WEB.API.Controllers
 
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
+        /*[Authorize]*/
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {

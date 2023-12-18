@@ -2,12 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WEB.API.Data;
 using WEB.Controllers;
 using WEB.Domain.Entities;
 using WEB.Domain.Models;
